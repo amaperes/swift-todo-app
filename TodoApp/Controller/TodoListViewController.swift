@@ -9,24 +9,25 @@
 import UIKit
 
 class TodoListViewController: UITableViewController {
-
+    
     var todoArray = [Todo]()
     
     let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Todos.plist")
     
+    // MARK: - View controller lifecycle methods
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         loadTodos()
     }
     
-    //MARK - TableView Datasource Methods
+    //MARK: - TableView Datasource Methods
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return todoArray.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
         let cell = tableView.dequeueReusableCell(withIdentifier: "TodoItemCell", for: indexPath)
         
         let todo = todoArray[indexPath.row]
@@ -37,34 +38,27 @@ class TodoListViewController: UITableViewController {
         } else {
             cell.accessoryType = .none
         }
-        
         return cell
     }
     
-    //MARK - TableView Delegate Methods
+    //MARK: - TableView Delegate Methods
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
         todoArray[indexPath.row].done = !todoArray[indexPath.row].done
-        
         saveTodos()
-        
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
-    //MARK - Add New Items
+    //MARK: - Add New Todos
+    
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
-        
         var textField = UITextField()
-        
         let alert = UIAlertController(title: "Add New Todoee Item", message: "", preferredStyle: .alert)
         
         let action  = UIAlertAction(title: "Add Item", style: .default) { (action) in
-            
             let newTodo = Todo()
             newTodo.title = textField.text!
-            
             self.todoArray.append(newTodo)
-
             self.saveTodos()
         }
         
@@ -74,20 +68,17 @@ class TodoListViewController: UITableViewController {
         }
         
         alert.addAction(action)
-        
         present(alert, animated: true, completion: nil)
     }
     
     func saveTodos() {
         let encoder = PropertyListEncoder()
-        
         do {
             let data = try encoder.encode(todoArray)
             try data.write(to: dataFilePath!)
         } catch {
             print("Error encoding todo array, \(error)")
         }
-        
         tableView.reloadData()
     }
     
