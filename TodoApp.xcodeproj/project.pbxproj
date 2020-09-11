@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E397F0C8250A911C00A9982A /* Todo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E397F0C7250A911C00A9982A /* Todo.swift */; };
 		E3F3C39C250A4D0D008947FD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3F3C39B250A4D0D008947FD /* AppDelegate.swift */; };
 		E3F3C39E250A4D0D008947FD /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3F3C39D250A4D0D008947FD /* SceneDelegate.swift */; };
 		E3F3C3A0250A4D0D008947FD /* TodoListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3F3C39F250A4D0D008947FD /* TodoListViewController.swift */; };
@@ -16,6 +17,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E397F0C7250A911C00A9982A /* Todo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Todo.swift; sourceTree = "<group>"; };
 		E3F3C398250A4D0D008947FD /* TodoApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TodoApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E3F3C39B250A4D0D008947FD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E3F3C39D250A4D0D008947FD /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -37,6 +39,30 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E397F0C6250A90F600A9982A /* Data Model */ = {
+			isa = PBXGroup;
+			children = (
+				E397F0C7250A911C00A9982A /* Todo.swift */,
+			);
+			path = "Data Model";
+			sourceTree = "<group>";
+		};
+		E397F0C9250A914F00A9982A /* View */ = {
+			isa = PBXGroup;
+			children = (
+				E3F3C3A1250A4D0D008947FD /* Main.storyboard */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		E397F0CA250A916E00A9982A /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				E3F3C39F250A4D0D008947FD /* TodoListViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
 		E3F3C38F250A4D0D008947FD = {
 			isa = PBXGroup;
 			children = (
@@ -58,8 +84,9 @@
 			children = (
 				E3F3C39B250A4D0D008947FD /* AppDelegate.swift */,
 				E3F3C39D250A4D0D008947FD /* SceneDelegate.swift */,
-				E3F3C39F250A4D0D008947FD /* TodoListViewController.swift */,
-				E3F3C3A1250A4D0D008947FD /* Main.storyboard */,
+				E397F0CA250A916E00A9982A /* Controller */,
+				E397F0C6250A90F600A9982A /* Data Model */,
+				E397F0C9250A914F00A9982A /* View */,
 				E3F3C3A4250A4D10008947FD /* Assets.xcassets */,
 				E3F3C3A6250A4D10008947FD /* LaunchScreen.storyboard */,
 				E3F3C3A9250A4D10008947FD /* Info.plist */,
@@ -141,6 +168,7 @@
 				E3F3C3A0250A4D0D008947FD /* TodoListViewController.swift in Sources */,
 				E3F3C39C250A4D0D008947FD /* AppDelegate.swift in Sources */,
 				E3F3C39E250A4D0D008947FD /* SceneDelegate.swift in Sources */,
+				E397F0C8250A911C00A9982A /* Todo.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
