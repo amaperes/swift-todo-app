@@ -12,20 +12,12 @@ class TodoListViewController: UITableViewController {
 
     var todoArray = [Todo]()
     
+    let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Todos.plist")
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let newTodo = Todo()
-        newTodo.title = "Design iOS app"
-        todoArray.append(newTodo)
-        
-        let newTodo2 = Todo()
-        newTodo2.title = "Implement iOS app"
-        todoArray.append(newTodo2)
-        
-        let newTodo3 = Todo()
-        newTodo3.title = "Launch iOS app"
-        todoArray.append(newTodo3)
+        loadTodos()
     }
     
     //MARK - TableView Datasource Methods
@@ -54,7 +46,8 @@ class TodoListViewController: UITableViewController {
         
         todoArray[indexPath.row].done = !todoArray[indexPath.row].done
         
-        tableView.reloadData()
+        saveTodos()
+        
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
@@ -66,10 +59,13 @@ class TodoListViewController: UITableViewController {
         let alert = UIAlertController(title: "Add New Todoee Item", message: "", preferredStyle: .alert)
         
         let action  = UIAlertAction(title: "Add Item", style: .default) { (action) in
+            
             let newTodo = Todo()
             newTodo.title = textField.text!
+            
             self.todoArray.append(newTodo)
-            self.tableView.reloadData()
+
+            self.saveTodos()
         }
         
         alert.addTextField { (alertTextField) in
@@ -80,6 +76,30 @@ class TodoListViewController: UITableViewController {
         alert.addAction(action)
         
         present(alert, animated: true, completion: nil)
+    }
+    
+    func saveTodos() {
+        let encoder = PropertyListEncoder()
+        
+        do {
+            let data = try encoder.encode(todoArray)
+            try data.write(to: dataFilePath!)
+        } catch {
+            print("Error encoding todo array, \(error)")
+        }
+        
+        tableView.reloadData()
+    }
+    
+    func loadTodos() {
+        if let data = try? Data(contentsOf: dataFilePath!) {
+            let decoder = PropertyListDecoder()
+            do {
+                todoArray = try decoder.decode([Todo].self, from: data)
+            } catch {
+                print("Error decoding todo array, \(error)")
+            }
+        }
     }
 }
 
