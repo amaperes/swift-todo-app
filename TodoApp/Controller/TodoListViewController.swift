@@ -7,17 +7,19 @@
 //
 
 import UIKit
+import CoreData
 
 class TodoListViewController: UITableViewController {
     
     var todoArray = [Todo]()
-    
-    let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Todos.plist")
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     // MARK: - View controller lifecycle methods
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
         loadTodos()
     }
     
@@ -56,8 +58,9 @@ class TodoListViewController: UITableViewController {
         let alert = UIAlertController(title: "Add New Todoee Item", message: "", preferredStyle: .alert)
         
         let action  = UIAlertAction(title: "Add Item", style: .default) { (action) in
-            let newTodo = Todo()
+            let newTodo = Todo(context: self.context)
             newTodo.title = textField.text!
+            newTodo.done = false
             self.todoArray.append(newTodo)
             self.saveTodos()
         }
@@ -72,24 +75,20 @@ class TodoListViewController: UITableViewController {
     }
     
     func saveTodos() {
-        let encoder = PropertyListEncoder()
         do {
-            let data = try encoder.encode(todoArray)
-            try data.write(to: dataFilePath!)
+            try context.save()
         } catch {
-            print("Error encoding todo array, \(error)")
+            print("Error saving context \(error)")
         }
         tableView.reloadData()
     }
     
     func loadTodos() {
-        if let data = try? Data(contentsOf: dataFilePath!) {
-            let decoder = PropertyListDecoder()
-            do {
-                todoArray = try decoder.decode([Todo].self, from: data)
-            } catch {
-                print("Error decoding todo array, \(error)")
-            }
+        let request: NSFetchRequest<Todo> = Todo.fetchRequest()
+        do {
+          todoArray = try context.fetch(request)
+        } catch {
+            print("Error fetching data from context \(error)")
         }
     }
 }
