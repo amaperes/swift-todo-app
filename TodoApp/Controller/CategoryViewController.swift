@@ -8,6 +8,7 @@
 
 import UIKit
 import RealmSwift
+import ChameleonFramework
 
 class CategoryViewController: SwipeTableViewController {
 
@@ -19,6 +20,24 @@ class CategoryViewController: SwipeTableViewController {
         super.viewDidLoad()
         
         loadCategories()
+        
+        tableView.separatorStyle = .none
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        let defaultBackground = UIColor(hexString: "6ECFFC")!
+                
+        guard let navBar = navigationController?.navigationBar else { fatalError("Navigation controller does not exist.")
+        }
+        let navBarAppearance = UINavigationBarAppearance()
+        
+        navBarAppearance.largeTitleTextAttributes = [.foregroundColor: ContrastColorOf(defaultBackground, returnFlat: true)]
+        navBarAppearance.backgroundColor = defaultBackground
+        
+        navBar.tintColor = ContrastColorOf(defaultBackground, returnFlat: true)
+        navBar.standardAppearance = navBarAppearance
+        navBar.scrollEdgeAppearance = navBarAppearance
+  
     }
 
     // MARK: - Table view data source
@@ -31,7 +50,12 @@ class CategoryViewController: SwipeTableViewController {
         
         let cell = super.tableView(tableView, cellForRowAt: indexPath)
         cell.textLabel?.text = categories?[indexPath.row].name ?? "No Categories Added yet"
-                
+
+        if let category = categories?[indexPath.row] {
+            guard let categoryColour = UIColor(hexString: category.colour) else {fatalError()}
+            cell.backgroundColor = categoryColour
+            cell.textLabel?.textColor = ContrastColorOf(categoryColour, returnFlat: true)
+        }
         return cell
     }
     
@@ -39,6 +63,8 @@ class CategoryViewController: SwipeTableViewController {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         performSegue(withIdentifier: "goToTodos", sender: self)
+        tableView.reloadData()
+        tableView.deselectRow(at: indexPath, animated: true)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -88,7 +114,8 @@ class CategoryViewController: SwipeTableViewController {
         let action = UIAlertAction(title: "Add Category", style: .default) { (action) in
             let newCategory = Category()
             newCategory.name = textField.text!
-            
+            newCategory.colour = UIColor.randomFlat().hexValue()
+
             self.save(category: newCategory)
         }
         
